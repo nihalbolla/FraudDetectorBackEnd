@@ -124,48 +124,49 @@ def update_dashboard():
     plt.pause(0.5)
 
 # ---------------- MAIN LOOP ----------------
-while True:
-    print("\nNew Transaction")
-    print("-" * 40)
-
-    try:
-        amount = float(input("Amount (₹): "))
-        freq = int(input("Transactions/hour: "))
-        hour = int(input("Hour (0-23): "))
-        loc = input("Location (IN/OUT): ").upper()
-
-        location = 0 if loc == "IN" else 1
-
-        score, decision, reasons, contributions = analyze(amount, freq, hour, location)
-
-        history_scores.append(score)
-        history_labels.append(decision)
-
-        print("\nRESULT")
+if __name__ == "__main__":
+    while True:
+        print("\nNew Transaction")
         print("-" * 40)
-        print(f"Risk Score : {score}%")
 
-        if decision == "BLOCK":
-            print("FRAUD DETECTED")
-        else:
-            print("SAFE TRANSACTION")
+        try:
+            amount = float(input("Amount (₹): "))
+            freq = int(input("Transactions/hour: "))
+            hour = int(input("Hour (0-23): "))
+            loc = input("Location (IN/OUT): ").upper()
 
-        print("\nReasons:")
-        for r in reasons:
-            print("-", r)
+            location = 0 if loc == "IN" else 1
+
+            score, decision, reasons, contributions = analyze(amount, freq, hour, location)
+
+            history_scores.append(score)
+            history_labels.append(decision)
+
+            print("\nRESULT")
+            print("-" * 40)
+            print(f"Risk Score : {score}%")
+
+            if decision == "BLOCK":
+                print("FRAUD DETECTED")
+            else:
+                print("SAFE TRANSACTION")
+
+            print("\nReasons:")
+            for r in reasons:
+                print("-", r)
 
         # -------- CONTRIBUTION PIE --------
-        if contributions:
-            labels = list(contributions.keys())
-            sizes = [abs(v) for v in contributions.values()]
+            if contributions:
+                labels = list(contributions.keys())
+                sizes = [abs(v) for v in contributions.values()]
 
-            plt.figure()
-            plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-            plt.title("Fraud Contribution Breakdown")
-            plt.show()
+                plt.figure()
+                plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+                plt.title("Fraud Contribution Breakdown")
+                plt.show()
 
         # -------- UPDATE DASHBOARD --------
-        update_dashboard()
+            update_dashboard()
 
-    except:
-        print("Invalid input")
+        except:
+            print("Invalid input")
